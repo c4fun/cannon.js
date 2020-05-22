@@ -84,6 +84,7 @@
             var instructions = document.getElementById( 'instructions' );
 
             var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+            var flashlightOn = false;
 
             if ( havePointerLock ) {
 
@@ -168,6 +169,23 @@
             initCannon();
             init();
             animate();
+            document.onkeyup = handler;
+
+            function handler(event){
+                var up = (event.type == 'keyup');
+
+                if(!up && event.type !== 'keydown')
+                    return;
+
+                switch(event.keyCode){
+
+                    case 70: // F(and it also listens to f)
+                        flashlightOn = !flashlightOn;
+                        console.log("Switched Light to: ", flashlightOn);
+                        break;
+
+                }
+            }
 
             function initCannon(){
                 // Setup our world
@@ -248,7 +266,7 @@
                 scene.add( light );
 
 
-
+                // because the player avatar uses PointerLockControl to control; we'd better attach the flashlight to the sphereBody so it goes with the player.
                 controls = new PointerLockControls( camera , sphereBody );
                 scene.add( controls.getObject() );
 
